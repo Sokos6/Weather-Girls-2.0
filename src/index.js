@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import SeasonDisplay from './SeasonDisplay';
 
 // const App = () => {
 //   window.navigator.geolocation.getCurrentPosition(
@@ -10,29 +11,31 @@ import ReactDOM from 'react-dom';
 // };
 
 class App extends Component {
-  constructor(props) {
-    super(props);
+  state = { lat: null, errorMessage: '' };
 
-    this.state = { lat: null, errorMessage: '' };
-
+  componentDidMount() {
+    console.log('My component rendered to the screen');
     window.navigator.geolocation.getCurrentPosition(
-      (position) => {
+      (position) =>
         this.setState({
           lat: position.coords.latitude,
-        });
-      },
-      (err) => {
-        this.setState({ errorMessage: err.message });
-      }
+        }),
+      (err) => this.setState({ errorMessage: err.message })
     );
   }
+
+  componentDidUpdate() {
+    console.log('My component was just updated, it rerendered!');
+  }
+
   render() {
-    if (this.state.errorMessage && !this.state.lat) {
-      return <div>Error: {this.state.errorMessage}</div>;
+    const { lat, errorMessage } = this.state;
+    if (errorMessage && !lat) {
+      return <div>Error: {errorMessage}</div>;
     }
 
-    if (!this.state.errorMessage && this.state.lat) {
-      return <div>Latitude: {this.state.lat}</div>;
+    if (!errorMessage && lat) {
+      return <SeasonDisplay lat={lat}/>
     }
     return <div>Loading!</div>;
   }
