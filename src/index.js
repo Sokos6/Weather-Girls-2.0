@@ -38,7 +38,7 @@ class App extends Component {
     if (!errorMessage && lat) {
       return <SeasonDisplay lat={lat}/>
     }
-    return <div><Spinner /></div>;
+    return <Spinner />;
   }
 }
 
